@@ -61,15 +61,14 @@ int main() {
         return -1;
     }
 
-    Sound sound;
-    sound.setBuffer(buffer);
+    Sound sound(buffer); // 수정된 부분: Sound 객체를 SoundBuffer를 사용해 생성
 
     auto frame_duration = chrono::milliseconds(16);
 
     sound.play();
     auto start_time = chrono::steady_clock::now();
     
-    while (sound.getStatus() == Sound::Playing) {
+    while (sound.getStatus() == Sound::Status::Playing) { // 수정된 부분: Status::Playing 사용
         for (const auto& frame : frames) {
             display_frame(frame);
             auto elapsed = chrono::steady_clock::now() - start_time;
