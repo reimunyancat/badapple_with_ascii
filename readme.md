@@ -29,7 +29,7 @@ This project consists of three main components:
 
 1. Clone the repository
    ```bash
-   git clone https://github.com/yourusername/bad-apple-ascii.git
+   git clone https://github.com/reimunyancat/bad-apple-ascii.git
    cd bad-apple-ascii
    ```
 
