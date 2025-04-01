@@ -11,9 +11,14 @@
 
 using namespace std;
 using namespace sf;
+namespace fs = std::filesystem;
 
 void init() {
-    cout << "\033[2J\033[H";
+    #ifdef _WIN32
+        system("cls");
+    #else
+        cout << "\033[2J\033[H";
+    #endif
 }
 
 void display_frame(const string& frame) {
@@ -24,7 +29,7 @@ void display_frame(const string& frame) {
 string load_frame(const string& filename) {
     ifstream file(filename);
     if (!file.is_open()) {
-        cerr << "파일을 열 수 없습니다: " << filename << '\n';
+        cerr << "Cannot open file: " << filename << '\n';
         return "";
     }
     string frame((istreambuf_iterator<char>(file)), istreambuf_iterator<char>());
@@ -38,37 +43,102 @@ string format_filename(int i) {
     return "BA" + filename_stream.str() + ".txt";
 }
 
-int main() {
+void print_usage(const string& program_name) {
+    cout << "Usage: " << program_name << " [options]\n"
+         << "Options:\n"
+         << "  --frames-dir <path>   Directory containing ASCII frames (default: ./BA_frame/txt)\n"
+         << "  --audio <path>        Path to audio file (default: ./bad_apple.mp3)\n"
+         << "  --help                Display this help message\n";
+}
+
+int main(int argc, char* argv[]) {
+    #ifdef _WIN32
+    HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+    DWORD dwMode = 0;
+    GetConsoleMode(hOut, &dwMode);
+    SetConsoleMode(hOut, dwMode | ENABLE_VIRTUAL_TERMINAL_PROCESSING);
+    #endif
+
+    fs::path frame_directory = "./BA_frame/txt";
+    fs::path audio_file = "./bad_apple.mp3";
+    
+    for (int i = 1; i < argc; i++) {
+        string arg = argv[i];
+        
+        if (arg == "--help") {
+            print_usage(argv[0]);
+            return 0;
+        } else if (arg == "--frames-dir" && i + 1 < argc) {
+            frame_directory = argv[++i];
+        } else if (arg == "--audio" && i + 1 < argc) {
+            audio_file = argv[++i];
+        } else {
+            cerr << "Unknown argument: " << arg << "\n";
+            print_usage(argv[0]);
+            return 1;
+        }
+    }
+    
+    cout << "Using frames directory: " << frame_directory.string() << "\n";
+    cout << "Using audio file: " << audio_file.string() << "\n";
+    
+    if (!fs::exists(frame_directory)) {
+        cerr << "Error: Frames directory does not exist: " << frame_directory.string() << "\n";
+        return 1;
+    }
+    
+    if (!fs::exists(audio_file)) {
+        cerr << "Error: Audio file does not exist: " << audio_file.string() << "\n";
+        return 1;
+    }
+    
     vector<string> frames;
-    string base_directory = "/home/reimunyancat/Archive/badapple";
-    string frame_directory = base_directory +  "/BA_frame/txt";
     int num_frames = 0;
 
-    for (const auto& entry : filesystem::directory_iterator(frame_directory)) {
+    for (const auto& entry : fs::directory_iterator(frame_directory)) {
         if (entry.path().extension() == ".txt") {
             num_frames++;
         }
     }
+    
+    if (num_frames == 0) {
+        cerr << "Error: No ASCII frames found in directory: " << frame_directory.string() << "\n";
+        return 1;
+    }
+    
+    cout << "Found " << num_frames << " ASCII frames\n";
 
-    for (int i = 1; i < num_frames; ++i) {
-        string filename = frame_directory + "/" + format_filename(i);
-        frames.push_back(load_frame(filename));
+    for (int i = 1; i <= num_frames; ++i) {
+        fs::path filename = frame_directory / format_filename(i);
+        string frame_content = load_frame(filename.string());
+        
+        if (frame_content.empty()) {
+            cerr << "Warning: Failed to load frame " << i << "\n";
+            continue;
+        }
+        
+        frames.push_back(frame_content);
+    }
+    
+    if (frames.empty()) {
+        cerr << "Error: Failed to load any frames\n";
+        return 1;
     }
 
     SoundBuffer buffer;
-    if (!buffer.loadFromFile(base_directory + "/bad_apple.mp3")) {
-        cerr << "오디오 파일을 로드할 수 없습니다!" << '\n';
-        return -1;
+    if (!buffer.loadFromFile(audio_file.string())) {
+        cerr << "Error: Could not load audio file: " << audio_file.string() << "\n";
+        return 1;
     }
 
-    Sound sound(buffer); // 수정된 부분: Sound 객체를 SoundBuffer를 사용해 생성
-
+    Sound sound(buffer);
     auto frame_duration = chrono::milliseconds(16);
 
+    cout << "Starting playback...\n";
     sound.play();
     auto start_time = chrono::steady_clock::now();
     
-    while (sound.getStatus() == Sound::Status::Playing) { // 수정된 부분: Status::Playing 사용
+    while (sound.getStatus() == Sound::Status::Playing) {
         for (const auto& frame : frames) {
             display_frame(frame);
             auto elapsed = chrono::steady_clock::now() - start_time;
@@ -81,4 +151,3 @@ int main() {
 
     return 0;
 }
-
