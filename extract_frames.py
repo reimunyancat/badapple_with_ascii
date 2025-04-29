@@ -48,7 +48,7 @@ if __name__ == "__main__":
     parser.add_argument('video_path', help='Path to the video file')
     parser.add_argument('--output', '-o', default='./BA_frame/png', 
                         help='Output directory for extracted frames (default: ./BA_frame/png)')
-    parser.add_argument('--fps', '-r', type=float, 
+    parser.add_argument('--fps', '-f', type=float, 
                         help='Frame rate for extraction (default: video native fps)')
     parser.add_argument('--scale', '-s', 
                         help='Scale the output frames (format: WIDTHxHEIGHT, e.g., 640x480)')
