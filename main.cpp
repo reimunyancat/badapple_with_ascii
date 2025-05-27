@@ -132,21 +132,28 @@ int main(int argc, char* argv[]) {
     }
 
     Sound sound(buffer);
-    auto frame_duration = chrono::milliseconds(16);
+    auto frame_duration = chrono::milliseconds(1000 / 60);
 
     cout << "Starting playback...\n";
     sound.play();
-    auto start_time = chrono::steady_clock::now();
     
-    while (sound.getStatus() == Sound::Status::Playing) {
-        for (const auto& frame : frames) {
-            display_frame(frame);
-            auto elapsed = chrono::steady_clock::now() - start_time;
-            if (elapsed < frame_duration) {
-                this_thread::sleep_for(frame_duration - elapsed);
-            }
-            start_time = chrono::steady_clock::now();
+    auto playback_start = chrono::steady_clock::now();
+    int frame_index = 0;
+    
+    while (sound.getStatus() == Sound::Status::Playing && frame_index < frames.size()) {
+        // 현재 시간 기준으로 재생해야 할 프레임 계산
+        auto current_time = chrono::steady_clock::now();
+        auto elapsed = chrono::duration_cast<chrono::milliseconds>(current_time - playback_start).count();
+        int target_frame = static_cast<int>(elapsed * 60 / 1000);
+        
+        // 프레임을 따라잡기
+        while (frame_index <= target_frame && frame_index < frames.size()) {
+            display_frame(frames[frame_index]);
+            frame_index++;
         }
+        
+        // CPU 사용률 최적화를 위해 짧게 대기
+        this_thread::sleep_for(chrono::milliseconds(1));
     }
 
     return 0;

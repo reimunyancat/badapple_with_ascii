@@ -15,7 +15,7 @@ def create_directories(output_dir):
         os.makedirs(output_dir)
         print(f"Created directory: {output_dir}")
 
-def extract_frames(video_path, output_dir, fps=None, scale=None):
+def extract_frames(video_path, output_dir, fps=60.0, scale=None):
     if not os.path.exists(video_path):
         print(f"Error: Video file not found at {video_path}")
         return False
@@ -24,8 +24,8 @@ def extract_frames(video_path, output_dir, fps=None, scale=None):
     
     command = ['ffmpeg', '-i', video_path]
     
-    if fps:
-        command.extend(['-r', str(fps)])
+    # Always set the frame rate (default is 60 fps)
+    command.extend(['-r', str(fps)])
     
     if scale:
         width, height = scale.split('x')
@@ -48,8 +48,8 @@ if __name__ == "__main__":
     parser.add_argument('video_path', help='Path to the video file')
     parser.add_argument('--output', '-o', default='./BA_frame/png', 
                         help='Output directory for extracted frames (default: ./BA_frame/png)')
-    parser.add_argument('--fps', '-f', type=float, 
-                        help='Frame rate for extraction (default: video native fps)')
+    parser.add_argument('--fps', '-f', type=float, default=60.0,
+                        help='Frame rate for extraction (default: 60 fps)')
     parser.add_argument('--scale', '-s', 
                         help='Scale the output frames (format: WIDTHxHEIGHT, e.g., 640x480)')
     
