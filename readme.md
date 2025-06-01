@@ -110,4 +110,4 @@ g++ -std=c++17 main.cpp -o main -lsfml-audio -lsfml-system -lsfml-graphics -lsfm
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the [Beerware License](LICENSE).
