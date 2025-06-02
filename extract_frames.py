@@ -43,11 +43,11 @@ if __name__ == "__main__":
     if not check_ffmpeg():
         print("Error: ffmpeg is not installed or not in PATH. Please install ffmpeg first.")
         print("Installation instructions:")
+        print("  - Arch Linux: sudo pacman -S ffmpeg")
         print("  - Ubuntu/Debian: sudo apt-get install ffmpeg")
         print("  - Fedora: sudo dnf install ffmpeg")
         print("  - macOS: brew install ffmpeg")
         print("  - Windows: Download from https://ffmpeg.org/download.html")
-        print("  - Arch Linux: sudo pacman -S ffmpeg")
         sys.exit(1)
     
     frame = extract_frames(video_path, output_dir, fps)
