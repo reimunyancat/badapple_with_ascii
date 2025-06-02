@@ -47,12 +47,14 @@ This project consists of three main components:
    ```
 
 4. Install ffmpeg
+   - Arch Linux: `sudo pacman -S ffmpeg`
    - Ubuntu/Debian: `sudo apt-get install ffmpeg`
    - Fedora: `sudo dnf install ffmpeg`
    - macOS: `brew install ffmpeg`
    - Windows: Download from [ffmpeg download page](https://ffmpeg.org/download.html)
 
 5. Install SFML
+   - Arch Linux: `sudo pacman -S sfml`
    - Ubuntu/Debian: `sudo apt-get install libsfml-dev`
    - Fedora: `sudo dnf install SFML-devel`
    - macOS: `brew install sfml`
@@ -65,11 +67,6 @@ This project consists of three main components:
 ```bash
 python extract_frames.py bad_apple.mp4
 ```
-
-Additional options:
-- Extract at specific FPS: `python extract_frames.py bad_apple.mp4 --fps 30`
-- Extract with specific resolution: `python extract_frames.py bad_apple.mp4 --scale 640x480`
-- Specify output path: `python extract_frames.py bad_apple.mp4 --output ./custom_path`
 
 ### 2. Convert Frames to ASCII Art
 
