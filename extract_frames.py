@@ -1,5 +1,4 @@
 import os
-import argparse
 import subprocess
 import sys
 
@@ -15,7 +14,7 @@ def create_directories(output_dir):
         os.makedirs(output_dir)
         print(f"Created directory: {output_dir}")
 
-def extract_frames(video_path, output_dir, fps=60.0, scale=None):
+def extract_frames(video_path, output_dir, fps):
     if not os.path.exists(video_path):
         print(f"Error: Video file not found at {video_path}")
         return False
@@ -23,14 +22,7 @@ def extract_frames(video_path, output_dir, fps=60.0, scale=None):
     create_directories(output_dir)
     
     command = ['ffmpeg', '-i', video_path]
-    
-    # Always set the frame rate (default is 60 fps)
     command.extend(['-r', str(fps)])
-    
-    if scale:
-        width, height = scale.split('x')
-        command.extend(['-vf', f'scale={width}:{height}'])
-    
     command.append(os.path.join(output_dir, 'BA_%05d.png'))
     
     print("Executing command:", ' '.join(command))
@@ -44,17 +36,10 @@ def extract_frames(video_path, output_dir, fps=60.0, scale=None):
         return False
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Extract frames from a video file using ffmpeg')
-    parser.add_argument('video_path', help='Path to the video file')
-    parser.add_argument('--output', '-o', default='./BA_frame/png', 
-                        help='Output directory for extracted frames (default: ./BA_frame/png)')
-    parser.add_argument('--fps', '-f', type=float, default=60.0,
-                        help='Frame rate for extraction (default: 60 fps)')
-    parser.add_argument('--scale', '-s', 
-                        help='Scale the output frames (format: WIDTHxHEIGHT, e.g., 640x480)')
-    
-    args = parser.parse_args()
-    
+    video_path = 'bad_apple.mp4'
+    output_dir = './BA_frame/png'
+    fps = 30
+
     if not check_ffmpeg():
         print("Error: ffmpeg is not installed or not in PATH. Please install ffmpeg first.")
         print("Installation instructions:")
@@ -64,9 +49,9 @@ if __name__ == "__main__":
         print("  - Windows: Download from https://ffmpeg.org/download.html")
         sys.exit(1)
     
-    success = extract_frames(args.video_path, args.output, args.fps, args.scale)
+    frame = extract_frames(video_path, output_dir, fps)
     
-    if success:
+    if frame:
         print("Frame extraction completed successfully.")
         print("Next steps:")
         print("1. Run 'python frame.py' to convert frames to ASCII art")

@@ -100,14 +100,6 @@ g++ -std=c++17 main.cpp -o main -lsfml-audio -lsfml-system -lsfml-graphics -lsfm
 └── bad_apple.mp3         # Audio file
 ```
 
-## Potential Improvements
-
-- Improve video and audio synchronization
-- Add various ASCII character set options
-- Implement real-time color support
-- Add auto-adjusting to terminal window size
-- Develop a single script to integrate frame extraction, ASCII conversion, and playback
-
 ## License
 
-This project is licensed under the [Beerware License](LICENSE).
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
