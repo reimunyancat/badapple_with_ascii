@@ -43,14 +43,6 @@ string format_filename(int i) {
     return "BA" + filename_stream.str() + ".txt";
 }
 
-void print_usage(const string& program_name) {
-    cout << "Usage: " << program_name << " [options]\n"
-         << "Options:\n"
-         << "  --frames-dir <path>   Directory containing ASCII frames (default: ./BA_frame/txt)\n"
-         << "  --audio <path>        Path to audio file (default: ./bad_apple.mp3)\n"
-         << "  --help                Display this help message\n";
-}
-
 int main(int argc, char* argv[]) {
     #ifdef _WIN32
     HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -61,24 +53,7 @@ int main(int argc, char* argv[]) {
 
     fs::path frame_directory = "./BA_frame/txt";
     fs::path audio_file = "./bad_apple.mp3";
-    
-    for (int i = 1; i < argc; i++) {
-        string arg = argv[i];
-        
-        if (arg == "--help") {
-            print_usage(argv[0]);
-            return 0;
-        } else if (arg == "--frames-dir" && i + 1 < argc) {
-            frame_directory = argv[++i];
-        } else if (arg == "--audio" && i + 1 < argc) {
-            audio_file = argv[++i];
-        } else {
-            cerr << "Unknown argument: " << arg << "\n";
-            print_usage(argv[0]);
-            return 1;
-        }
-    }
-    
+
     cout << "Using frames directory: " << frame_directory.string() << "\n";
     cout << "Using audio file: " << audio_file.string() << "\n";
     

@@ -7,6 +7,7 @@ A terminal-based Bad Apple video ASCII art player. This project converts the fam
 ## Overview
 
 This project consists of three main components:
+
 1. Video frame extraction (extract_frames.py)
 2. Frame conversion to ASCII art (frame.py)
 3. Terminal playback with music (main.cpp)
@@ -14,26 +15,31 @@ This project consists of three main components:
 ## Requirements
 
 ### Common Requirements
+
 - ffmpeg (for frame extraction)
 
 ### Python Dependencies
+
 - Python 3.8+
 - NumPy 2.1.3+
 - Pillow 11.0.0+
 
 ### C++ Dependencies
+
 - C++17 compatible compiler
 - SFML library (for audio playback)
 
 ## Installation
 
 1. Clone the repository
+
    ```bash
    git clone https://github.com/reimunyancat/bad-apple-ascii.git
    cd bad-apple-ascii
    ```
 
 2. Set up Python virtual environment (optional)
+
    ```bash
    python -m venv venv
    source venv/bin/activate  # Linux/Mac
@@ -42,21 +48,22 @@ This project consists of three main components:
    ```
 
 3. Install Python dependencies
+
    ```bash
    pip install -r requirements.txt
    ```
 
 4. Install ffmpeg
+
    - Arch Linux: `sudo pacman -S ffmpeg`
-   - Ubuntu/Debian: `sudo apt-get install ffmpeg`
-   - Fedora: `sudo dnf install ffmpeg`
+   - Ubuntu: `sudo apt-get install ffmpeg`
    - macOS: `brew install ffmpeg`
    - Windows: Download from [ffmpeg download page](https://ffmpeg.org/download.html)
 
 5. Install SFML
+
    - Arch Linux: `sudo pacman -S sfml`
-   - Ubuntu/Debian: `sudo apt-get install libsfml-dev`
-   - Fedora: `sudo dnf install SFML-devel`
+   - Ubuntu: `sudo apt-get install libsfml-dev`
    - macOS: `brew install sfml`
    - Windows: Download from [SFML download page](https://www.sfml-dev.org/download.php)
 
